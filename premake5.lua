@@ -73,6 +73,28 @@ project "helloworld"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
 	setBxCompat()
 	
+project "helloworld-ref"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++14"
+	exceptionhandling "Off"
+	rtti "Off"
+	files "helloworld-ref.cpp"
+	includedirs
+	{
+		path.join(BGFX_DIR, "include"),
+		path.join(BX_DIR, "include"),
+		path.join(GLFW_DIR, "include")
+	}
+	links { "bgfx", "bimg", "bx", "glfw" }
+	filter "system:windows"
+		links { "gdi32", "kernel32", "psapi" }
+	filter "system:linux"
+		links { "dl", "GL", "pthread", "X11" }
+	filter "system:macosx"
+		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
+	setBxCompat()
+	
 project "bgfx"
 	kind "StaticLib"
 	language "C++"
