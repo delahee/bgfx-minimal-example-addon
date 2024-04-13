@@ -74,17 +74,22 @@ project "helloworld"
 	setBxCompat()
 	
 project "helloworld-ref"
+	debugdir "." 
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++14"
-	exceptionhandling "Off"
-	rtti "Off"
+	cppdialect "C++17"
+	--exceptionhandling "Off"
+	--rtti "Off"
 	files "helloworld-ref.cpp"
+	files "bm/Lib.hpp"
+	files "bm/Lib.cpp"
 	includedirs
 	{
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
-		path.join(GLFW_DIR, "include")
+		path.join(GLFW_DIR, "include"),
+		path.join(BIMG_DIR, "include"),
+		"bm"
 	}
 	links { "bgfx", "bimg", "bx", "glfw" }
 	filter "system:windows"
@@ -98,9 +103,9 @@ project "helloworld-ref"
 project "bgfx"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++14"
-	exceptionhandling "Off"
-	rtti "Off"
+	cppdialect "C++17"
+	--exceptionhandling "Off"
+	--rtti "Off"
 	defines "__STDC_FORMAT_MACROS"
 	files
 	{
