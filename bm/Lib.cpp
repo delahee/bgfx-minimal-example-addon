@@ -32,3 +32,13 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 	free(bytes);
 	return hdl;
 }
+
+#include "shdr/vs_sprite.bin.h"
+#include "shdr/fs_sprite.bin.h"
+
+bgfx::ShaderHandle bm::getSpriteShader() {
+	return {};
+}
+
+void bm::makeMVP() {
+}

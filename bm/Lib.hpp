@@ -5,16 +5,16 @@
 
 struct PosUVColVertex
 {
-	float		pos[4] = {};
-	float		uv[4] = {};
+	float		pos[3] = {};
+	float		uv[2] = {};
 	float		col[4] = {};
 
 	static void init()
 	{
 		vtx_layout
 			.begin()
-			.add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float)
-			.add(bgfx::Attrib::TexCoord0, 4, bgfx::AttribType::Float)
+			.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+			.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
 			.add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float)
 			.end();
 	};
@@ -23,6 +23,8 @@ struct PosUVColVertex
 };
 
 namespace bm {
-	void plop();
+	void				plop();
 	bgfx::TextureHandle getPng(const char * texPath);
+	bgfx::ShaderHandle	getSpriteShader();;
+	void				makeMVP();;
 }

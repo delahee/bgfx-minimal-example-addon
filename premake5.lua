@@ -83,13 +83,18 @@ project "helloworld-ref"
 	files "helloworld-ref.cpp"
 	files "bm/Lib.hpp"
 	files "bm/Lib.cpp"
+	
+	files "bm/shdr/vs_sprite.bin.h"
+	files "bm/shdr/fs_sprite.bin.h"
+	
 	includedirs
 	{
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
 		path.join(GLFW_DIR, "include"),
 		path.join(BIMG_DIR, "include"),
-		"bm"
+		"bm",
+		"bm/shdr"
 	}
 	links { "bgfx", "bimg", "bx", "glfw" }
 	filter "system:windows"

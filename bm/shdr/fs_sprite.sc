@@ -1,6 +1,6 @@
-$input v_texCoord0, v_color0
+$input v_texcoord0, v_color0
 
-#include "../common/common.sh"
+#include "common.sh"
 
 void main()
 {
