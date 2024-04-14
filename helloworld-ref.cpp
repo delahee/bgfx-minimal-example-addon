@@ -101,30 +101,10 @@ int main(int argc, char **argv)
 		bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters.", stats->width, stats->height, stats->textWidth, stats->textHeight);
 		
 		bm::makeMVP(width,height);
+		bm::makeRenderStates();
+		bm::setShader(shdr);
+		bm::drawTri();
 		
-		bgfx::TransientVertexBuffer tvb;
-		int maxVertices = 3;
-		bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
-		PosUVColVertex* vtxData = (PosUVColVertex*) tvb.data;
-		memset(vtxData, 0, maxVertices * sizeof(PosUVColVertex));
-		PosUVColVertex& v0 = *(vtxData + 0);
-		PosUVColVertex& v1 = *(vtxData + 1);
-		PosUVColVertex& v2 = *(vtxData + 2);
-		//PosUVColVertex& vMem = *(vtxData + 3);
-		float w = 100.0f;
-		float depth = 0.01f;//because default render state is set to zless
-		v0.setPos(bx::Vec3(0, 0.5 * w, depth));
-		v2.setPos(bx::Vec3(0.5 * w, 0, depth));
-		v1.setPos(bx::Vec3(0, 0, depth));
-		bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
-
-		int state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_CULL_CW;
-		state |= BGFX_STATE_DEPTH_TEST_GEQUAL | BGFX_STATE_MSAA | BGFX_STATE_WRITE_Z;
-		int dfltState = BGFX_STATE_DEFAULT;
-		bgfx::setState(state);
-		
-		//bm::drawQuad( "phi_angry", 50,50, vec2(0.5,1.0));
-		bgfx::submit(0, shdr);
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );
 		// Enable stats or debug text.

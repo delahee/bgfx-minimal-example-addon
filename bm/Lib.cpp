@@ -76,22 +76,38 @@ void bm::makeMVP( int bbW, int bbH ) { //keep it to identity as we don't have a 
 	bgfx::setViewTransform(0, varr, parr);
 }
 
-void bm::makeRenderStates()
-{
-	// uint64_t  _state = 0
-	//| BGFX_STATE_RGB_WRITE
-	//	| BGFX_STATE_ALPHA_WRITE
-	//	| BGFX_STATE_DEPTH_WRITE
-	//	| BGFX_STATE_DEPTH_TEST_LESS
-	//	| BGFX_STATE_MSAA
-	//	;
+void bm::makeRenderStates(){
+	int state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_CULL_CW;//write colors
+	state |= BGFX_STATE_DEPTH_TEST_GEQUAL | BGFX_STATE_MSAA | BGFX_STATE_WRITE_Z;//be aa  and z consistent
+	bgfx::setState(state);
 }
 
-void bm::drawTri()
-{
-	//set vb
-	//set texture
-	//shader submit
+
+static bgfx::ProgramHandle shdr = {};
+void bm::setShader(bgfx::ProgramHandle s) {
+	shdr = s;
+}
+
+void bm::drawTri(){
+	bgfx::TransientVertexBuffer tvb;
+	int maxVertices = 3;
+	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
+	PosUVColVertex* vtxData = (PosUVColVertex*)tvb.data;
+	memset(vtxData, 0, maxVertices * sizeof(PosUVColVertex));
+	PosUVColVertex& v0 = *(vtxData + 0);
+	PosUVColVertex& v1 = *(vtxData + 1);
+	PosUVColVertex& v2 = *(vtxData + 2);
+	float w = 200.0f;
+	float depth = 0.01f;//because default render state is set to zless
+	v0.setPos(bx::Vec3(0, 0.5 * w, depth));
+	v2.setPos(bx::Vec3(0.5 * w, 0, depth));
+	v1.setPos(bx::Vec3(0, 0, depth));
+
+	v0.setCol( bm::white );
+	v1.setCol( bm::magenta );
+	v2.setCol( bm::white );
+	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
+	bgfx::submit(0, shdr);
 }
 
 void bm::drawQuad()

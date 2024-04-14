@@ -52,6 +52,7 @@ namespace bm {
 	void				clear();
 	void				makeMVP(int bbW, int bbH);
 	void				makeRenderStates();
+	void				setShader(bgfx::ProgramHandle s);
 
 	void				drawTri(); // pos size pivot?
 	void				drawLine(); // pos pos
