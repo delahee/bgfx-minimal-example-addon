@@ -47,6 +47,8 @@ namespace bm {
 		float x, y, z, w;
 	};
 
+	
+
 	static Vec4 white{ 1,1,1,1 };
 	static Vec4 magenta{ 1,0,1,1 };
 

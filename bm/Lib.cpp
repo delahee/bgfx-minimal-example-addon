@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cctype>
+#include <vector>
 
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
@@ -110,8 +111,37 @@ void bm::drawTri(){
 	bgfx::submit(0, shdr);
 }
 
+
 void bm::drawQuad()
 {
+	bgfx::TransientVertexBuffer tvb;
+	int maxVertices = 6;
+	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
+	PosUVColVertex* vtxData = (PosUVColVertex*)tvb.data;
+	memset(vtxData, 0, maxVertices * sizeof(PosUVColVertex));
+	PosUVColVertex& v0 = *(vtxData + 0);
+	PosUVColVertex& v1 = *(vtxData + 1);
+	PosUVColVertex& v2 = *(vtxData + 2);
+	PosUVColVertex& v3 = *(vtxData + 3);
+	PosUVColVertex& v4 = *(vtxData + 4);
+	PosUVColVertex& v5 = *(vtxData + 5);
+	float w = 200.0f;
+	float depth = 0.01f;//because default render state is set to zless
+
+	v0.setPos(bx::Vec3(0, 0.5 * w, depth));
+	v1.setPos(bx::Vec3(0, 0, depth));
+	v2.setPos(bx::Vec3(0.5 * w, 0, depth));
+
+	v3.setPos(bx::Vec3(0.5 * w, 0, depth));
+	v4.setPos(bx::Vec3(0.5 * w, 0.5 * w, depth));
+	v5.setPos(bx::Vec3(0, 0.5 * w, depth));
+
+	std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
+	for (auto& v : vec)
+		v->setCol(bm::white);
+
+	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
+	bgfx::submit(0, shdr);
 }
 
 

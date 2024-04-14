@@ -41,6 +41,14 @@ struct PosUVColVertex{
 	static bgfx::VertexLayout vtx_layout;
 };
 
+struct Tri {
+	PosUVColVertex* vtx;
+};
+
+struct Quad {
+	PosUVColVertex* vtx;
+};
+
 namespace bm {
 	void				plop();
 	bgfx::TextureHandle getPng(const char * texPath);

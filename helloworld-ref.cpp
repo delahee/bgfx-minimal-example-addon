@@ -103,7 +103,8 @@ int main(int argc, char **argv)
 		bm::makeMVP(width,height);
 		bm::makeRenderStates();
 		bm::setShader(shdr);
-		bm::drawTri();
+		//bm::drawTri();
+		bm::drawQuad();
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );
