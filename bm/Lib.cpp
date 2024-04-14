@@ -64,14 +64,16 @@ bgfx::ProgramHandle bm::getSpriteShader() {
 	return m_program;
 }
 
-//MVP
-void bm::makeMVP() { //keep it to identity as we don't have a camera system
-	//bgfx::setTransform model
+//initial view is black with alpha 0 and depth 0
+void bm::clear(){
+	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xff, 0.0f);
+}
 
-	float* arr = proj.mat.val;
-	//bx::mtxOrtho(arr, 0, 1280, 720, 0, 0, 1, 0, false);
-	//bgfx::setViewTransform(0, &view.mat, &proj.mat);
-	//bgfx::setProjection proj
+void bm::makeMVP( int bbW, int bbH ) { //keep it to identity as we don't have a camera system
+	float* varr = view.mat.val;
+	float* parr = proj.mat.val;
+	bx::mtxOrtho(parr, 0, bbW, bbH, 0, 0, 1, 0, false);
+	bgfx::setViewTransform(0, varr, parr);
 }
 
 void bm::makeRenderStates()
@@ -95,5 +97,7 @@ void bm::drawTri()
 void bm::drawQuad()
 {
 }
+
+
 
 //DRAW QUAD

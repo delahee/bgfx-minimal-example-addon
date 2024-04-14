@@ -85,9 +85,9 @@ int main(int argc, char **argv)
 			bgfx::reset((uint32_t)width, (uint32_t)height, BGFX_RESET_VSYNC);
 			bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
 		}
-		bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH,0xff, 0.0f);
+		bm::clear();
 
-		// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.
+		//dummy ping
 		bgfx::touch(kClearView);
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
@@ -100,17 +100,9 @@ int main(int argc, char **argv)
 		
 		bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters.", stats->width, stats->height, stats->textWidth, stats->textHeight);
 		
-		bm::makeMVP();
-		//0 1 2 3
-		//4 5 6 7
-		//8 9 10 11
-		//12 13 24 35
-		//bgfx::dbgTextPrintf(0, 5, 0x0f, "after view change");
-
-		//bm::makeVB();
+		bm::makeMVP(width,height);
 		
 		bgfx::TransientVertexBuffer tvb;
-
 		int maxVertices = 3;
 		bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
 		PosUVColVertex* vtxData = (PosUVColVertex*) tvb.data;
@@ -119,17 +111,18 @@ int main(int argc, char **argv)
 		PosUVColVertex& v1 = *(vtxData + 1);
 		PosUVColVertex& v2 = *(vtxData + 2);
 		//PosUVColVertex& vMem = *(vtxData + 3);
-		float w = 1.0f;
-		float depth = 0.5f;//because default render state is set to zless
+		float w = 100.0f;
+		float depth = 0.01f;//because default render state is set to zless
 		v0.setPos(bx::Vec3(0, 0.5 * w, depth));
 		v2.setPos(bx::Vec3(0.5 * w, 0, depth));
 		v1.setPos(bx::Vec3(0, 0, depth));
 		bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
-		// // Set render states.
+
 		int state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_CULL_CW;
 		state |= BGFX_STATE_DEPTH_TEST_GEQUAL | BGFX_STATE_MSAA | BGFX_STATE_WRITE_Z;
 		int dfltState = BGFX_STATE_DEFAULT;
 		bgfx::setState(state);
+		
 		//bm::drawQuad( "phi_angry", 50,50, vec2(0.5,1.0));
 		bgfx::submit(0, shdr);
 		//bm::submit();//and discard current pipeline

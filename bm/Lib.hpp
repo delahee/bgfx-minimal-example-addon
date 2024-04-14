@@ -49,7 +49,8 @@ namespace bm {
 	static bm::Matrix4	model;
 	static bm::Matrix4	view;
 	static bm::Matrix4	proj;
-	void				makeMVP();
+	void				clear();
+	void				makeMVP(int bbW, int bbH);
 	void				makeRenderStates();
 
 	void				drawTri(); // pos size pivot?
