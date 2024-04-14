@@ -5,6 +5,8 @@
 #include <bimg/bimg.h>
 #include "Math.hpp"
 
+typedef bm::Vec2 Vec2;
+
 struct PosUVColVertex{
 	float		pos[3];
 	float		uv[2];
@@ -65,7 +67,7 @@ namespace bm {
 	void				drawTri(); // pos size pivot?
 	void				drawLine(); // pos pos
 	void				drawCircle(); // pos radius 
-	void				drawQuad(); // pos size pivot?
+	void				drawQuad(Vec2 pos, Vec2 sz); // pos size pivot?
 
 	
 }

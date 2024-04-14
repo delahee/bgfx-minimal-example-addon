@@ -47,15 +47,10 @@ namespace bm {
 		float x, y, z, w;
 	};
 
-	
-
 	static Vec4 white{ 1,1,1,1 };
 	static Vec4 magenta{ 1,0,1,1 };
 
-
-	inline Vec4::Vec4(bx::init::NoneType)
-	{
-	}
+	inline Vec4::Vec4(bx::init::NoneType)	{}
 
 	constexpr Vec4::Vec4(bx::init::ZeroType)
 		: x(0.0f)
@@ -86,6 +81,52 @@ namespace bm {
 		, y(_y)
 		, z(_z)
 		, w(_w)
+	{
+	}
+
+	struct Vec2	{
+		Vec2() = delete;
+
+		///
+		Vec2(bx::init::NoneType);
+
+		///
+		constexpr Vec2(bx::init::ZeroType);
+
+		///
+		constexpr Vec2(bx::init::IdentityType);
+
+		///
+		explicit constexpr Vec2(float _v);
+
+		///
+		constexpr Vec2(float _x, float _y);
+
+		float x, y;
+	};
+
+	inline Vec2::Vec2(bx::init::NoneType){}
+	constexpr Vec2::Vec2(bx::init::ZeroType)
+		: x(0.0f)
+		, y(0.0f)
+	{
+	}
+
+	constexpr Vec2::Vec2(bx::init::IdentityType)
+		: x(0.0f)
+		, y(0.0f)
+	{
+	}
+
+	constexpr Vec2::Vec2(float _v)
+		: x(_v)
+		, y(_v)
+	{
+	}
+
+	constexpr Vec2::Vec2(float _x, float _y )
+		: x(_x)
+		, y(_y)
 	{
 	}
 }

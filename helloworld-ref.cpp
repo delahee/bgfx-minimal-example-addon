@@ -74,8 +74,12 @@ int main(int argc, char **argv)
 	bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
 	bm::plop();
 
-	auto png = bm::getPng("bm/res/pixel.png");
+	auto texPixel = bm::getPng("bm/res/pixel.png");
+	auto texPhi = bm::getPng("bm/res/phi_angry.png");
+
 	auto shdr = bm::getSpriteShader();
+	//auto texSample = bgfx::createUniform( "tex0",UniformType::
+
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		// Handle window resize.
@@ -97,14 +101,16 @@ int main(int argc, char **argv)
 		bgfx::dbgTextPrintf(80, 1, 0x0f, "\x1b[;0m    \x1b[;1m    \x1b[; 2m    \x1b[; 3m    \x1b[; 4m    \x1b[; 5m    \x1b[; 6m    \x1b[; 7m    \x1b[0m");
 		bgfx::dbgTextPrintf(80, 2, 0x0f, "\x1b[;8m    \x1b[;9m    \x1b[;10m    \x1b[;11m    \x1b[;12m    \x1b[;13m    \x1b[;14m    \x1b[;15m    \x1b[0m");
 		const bgfx::Stats* stats = bgfx::getStats();
-		
+
 		bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters.", stats->width, stats->height, stats->textWidth, stats->textHeight);
-		
-		bm::makeMVP(width,height);
+
+		bm::makeMVP(width, height);
 		bm::makeRenderStates();
+		//bm::setTexture(tex);
+		//bgfx::setTexture(0, uniTex, tex);
 		bm::setShader(shdr);
 		//bm::drawTri();
-		bm::drawQuad();
+		bm::drawQuad({100,000}, { 40,20 });
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );
