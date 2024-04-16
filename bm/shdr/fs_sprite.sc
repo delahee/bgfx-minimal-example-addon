@@ -14,5 +14,5 @@ void main(){
 	//gl_FragColor = v_color0 + diffuse;
 	//gl_FragColor = diffuse;
 	//gl_FragColor = vec4(gl_FragCoord.xy,1.0,1.0);
-	gl_FragColor = texCol;
+	gl_FragColor = texCol * v_color0;
 }

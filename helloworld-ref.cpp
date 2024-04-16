@@ -108,10 +108,25 @@ int main(int argc, char **argv)
 		bm::makeMVP(width, height);
 		bm::makeRenderStates();
 		//bm::setTexture(tex);
-		bgfx::setTexture(0, texSampler, texPhi);
+		//bgfx::setTexture(0, texSampler, texPhi);
+		bgfx::setTexture(0, texSampler, texPixel);
 		bm::setShader(shdr);
 		//bm::drawTri();
-		bm::drawQuad({ 50, 50}, { 100 *2, 94*2 });
+		//bm::drawQuad({ 50, 50}, { 100*2, 94*2 });
+		bm::drawLine({ 300, 300 }, { 400,400 }, 64);
+
+		//bgfx::setTexture(0, texSampler, texPixel);
+		//bm::setShader(shdr);
+		//bm::drawQuad({ 16, 16 }, { 16, 16 }, {1,0,1,1});
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texPixel);
+		bm::setShader(shdr);
+		bm::drawQuad({ 300-8, 300-8}, { 16, 16 });
+
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texPixel);
+		bm::setShader(shdr);
+		bm::drawQuad({ 400-8, 400-8}, { 16, 16 });
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );

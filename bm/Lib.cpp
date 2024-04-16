@@ -131,8 +131,52 @@ void bm::drawTri(){
 	bgfx::submit(0, shdr);
 }
 
+void bm::drawLine(Vec2 a, Vec2 b, float th){
+	bgfx::TransientVertexBuffer tvb;
+	int maxVertices = 6;
+	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
+	PosUVColVertex* vtxData = (PosUVColVertex*)tvb.data;
+	memset(vtxData, 0, maxVertices * sizeof(PosUVColVertex));
+	PosUVColVertex& v0 = *(vtxData + 0);
+	PosUVColVertex& v1 = *(vtxData + 1);
+	PosUVColVertex& v2 = *(vtxData + 2);
+	PosUVColVertex& v3 = *(vtxData + 3);
+	PosUVColVertex& v4 = *(vtxData + 4);
+	PosUVColVertex& v5 = *(vtxData + 5);
+	float depth = 0.01f;//because default render state is set to zless
+	float pi = 3.14159;
+	float angle = atan2(b.y - a.y, b.x - a.x);
+	float xd = cosf(angle);
+	float yd = sinf(angle);
+
+	float tX = cosf(angle - pi * 0.5f) * th * 0.5f;
+	float tY = sinf(angle - pi * 0.5f) * th * 0.5f;
+
+	float bX = cosf(angle + pi * 0.5f) * th * 0.5f;
+	float bY = sinf(angle + pi * 0.5f) * th * 0.5f;
+
+	v0.setPos(bx::Vec3( a.x + bX,	a.y + bY,	depth)); v0.setUV({ 0.f, 1.0f }); v0.setCol({ 1,0,0,1 }); //bl	
+	v1.setPos(bx::Vec3( a.x + tX,	a.y + tY,	depth)); v1.setUV({ 0.0f,0.0f }); v1.setCol({ 0,1,0,1 }); //tl
+	v2.setPos(bx::Vec3( b.x + tX,	b.y + tY,	depth)); v2.setUV({ 1.0f,0.0f }); v2.setCol({ 0,0,1,1 }); //tr
+
+	v3.setPos(bx::Vec3(b.x + tX, b.y + tY, depth)); v3.setUV({ 1.0f,0.0f }); v3.setCol({ 0,0,1,1 }); //tr
+	v4.setPos(bx::Vec3(b.x + bX, b.y + bY, depth));	v4.setUV({ 1.0f,1.0f }); v4.setCol({ 1,0,1,1 }); //br	
+	v5.setPos(bx::Vec3(a.x + bX, a.y + bY, depth)); v5.setUV({ 0.f, 1.0f }); v5.setCol({ 1,0,0,1 }); //bl	
+
+	//std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
+	//for (auto& v : vec)
+	//	v->setCol(bm::white);
+
+	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
+	bgfx::submit(0, shdr);
+}
+
 
 void bm::drawQuad(Vec2 pos, Vec2 sz){
+	drawQuad(pos, sz, Vec4(1, 1, 1, 1));
+}
+
+void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
 	bgfx::TransientVertexBuffer tvb;
 	int maxVertices = 6;
 	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
@@ -151,13 +195,14 @@ void bm::drawQuad(Vec2 pos, Vec2 sz){
 	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v0.setUV({ 0.f, 1.0f });
 	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth));	v1.setUV({ 0.0f,0.0f });
 	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v2.setUV({ 1.0f,0.0f });
+
 	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v3.setUV({ 1.f, 0.0f });
 	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h, depth));		v4.setUV({ 1.0f,1.0f });
 	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h, depth));		v5.setUV({ 0.0f,1.0f });
 
 	std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
 	for (auto& v : vec)
-		v->setCol(bm::white);
+		v->setCol(col);
 
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, shdr);
