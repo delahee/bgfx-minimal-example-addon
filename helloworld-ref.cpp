@@ -78,7 +78,8 @@ int main(int argc, char **argv)
 	auto texPhi = bm::getPng("bm/res/phi_angry.png");
 
 	auto shdr = bm::getSpriteShader();
-	//auto texSample = bgfx::createUniform( "tex0",UniformType::
+	auto texSampler = bgfx::createUniform("tex0", bgfx::UniformType::Sampler, 1);
+
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -107,10 +108,10 @@ int main(int argc, char **argv)
 		bm::makeMVP(width, height);
 		bm::makeRenderStates();
 		//bm::setTexture(tex);
-		//bgfx::setTexture(0, uniTex, tex);
+		bgfx::setTexture(0, texSampler, texPhi);
 		bm::setShader(shdr);
-		//bm::drawTri();
-		bm::drawQuad({100,000}, { 40,20 });
+		bm::drawTri();
+		//bm::drawQuad({100,000}, { 40,20 });
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );

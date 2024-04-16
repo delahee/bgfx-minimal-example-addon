@@ -8,22 +8,33 @@
 
 #include "Lib.hpp"
 
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#include <unordered_map>
+#include <string>
 
 void bm::plop(){
 	printf("toto");
 }
 
+static std::unordered_map<std::string, bgfx::TextureHandle>  texCache;
+
 bgfx::TextureHandle bm::getPng(const char * texPath) {
-	FILE* c = fopen(texPath, "rb");
+
+	if (texCache.find(texPath) != texCache.end())
+		return texCache[texPath];
+
+	FILE* c = 0;
+	fopen_s(&c,texPath, "rb");
 	int w = 0;
 	int h = 0;
 	int chans = 0;
 	int desired = 4;
-	if (!c)
+	if (!c) {
+		printf("no tex content");
 		return {};
+	}
 	uint8_t* bytes = stbi_load_from_file(c, &w, &h, &chans, desired);
 	uint32_t sz = w * h * chans;
 	fclose(c);
@@ -32,6 +43,7 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 	memcpy(mem->data, bytes,sz);
 	auto hdl = bgfx::createTexture2D(w, h, false, 1, bgfx::TextureFormat::RGBA8, BGFX_SAMPLER_POINT, mem);
 	free(bytes);
+	texCache[texPath] = hdl;
 	return hdl;
 }
 
@@ -98,15 +110,23 @@ void bm::drawTri(){
 	PosUVColVertex& v0 = *(vtxData + 0);
 	PosUVColVertex& v1 = *(vtxData + 1);
 	PosUVColVertex& v2 = *(vtxData + 2);
-	float w = 200.0f;
+
+	bx::Vec3 pos = { 150,150,0 };
+	float w = 500.0f;
 	float depth = 0.01f;//because default render state is set to zless
-	v0.setPos(bx::Vec3(0, 0.5 * w, depth));
-	v2.setPos(bx::Vec3(0.5 * w, 0, depth));
-	v1.setPos(bx::Vec3(0, 0, depth));
+	
+	v0.setPos({ pos.x + 0,			pos.y + 0.5f * w, depth });
+	v1.setPos({ pos.x + 0,			pos.y + 0, depth });
+	v2.setPos({ pos.x + 0.5f * w,	pos.y + 0, depth });
+
+	v0.setUV({0.f, 2.0f});
+	v1.setUV({0.0f,0.0f});
+	v2.setUV({2.0f,0.0f});
 
 	v0.setCol( bm::white );
 	v1.setCol( bm::magenta );
 	v2.setCol( bm::white );
+	
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, shdr);
 }

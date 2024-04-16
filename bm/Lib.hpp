@@ -28,7 +28,7 @@ struct PosUVColVertex{
 		pos[2] = v.z;
 	};
 
-	inline void setUV(const bx::Vec3& v) {
+	inline void setUV(const Vec2& v) {
 		uv[0] = v.x;
 		uv[1] = v.y;
 	};
