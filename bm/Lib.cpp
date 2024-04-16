@@ -97,6 +97,7 @@ void bm::makeRenderStates(){
 
 
 static bgfx::ProgramHandle shdr = {};
+static bool submitAndDiscard = true;
 void bm::setShader(bgfx::ProgramHandle s) {
 	shdr = s;
 }
@@ -128,6 +129,33 @@ void bm::drawTri(){
 	v2.setCol( bm::white );
 	
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
+	submit();
+}
+
+void bm::submit() {
+	if(submitAndDiscard)
+		bgfx::submit(0, shdr);
+	else 
+		bgfx::submit(0, shdr,0, BGFX_DISCARD_NONE);
+}
+
+void bm::drawCircle(Vec2 a, float radius, float th, int nbSegments){
+	float pi = 3.14159;
+	if (nbSegments <= 0)	nbSegments = std::ceil(radius * pi * 2 / 4);
+	if (nbSegments < 3)		nbSegments = 3;
+
+	submitAndDiscard = false;
+	const float angle = pi * 2 / nbSegments;
+	for (int i = 0; i < nbSegments; i++) {
+		auto a0 = i * angle;
+		auto a1 = (i + 1) * angle;
+		auto a0x = a.x + cosf(a0) * radius;
+		auto a0y = a.y + sinf(a0) * radius;
+		auto a1x = a.x + cosf(a1) * radius;
+		auto a1y = a.y + sinf(a1) * radius;
+		drawLine({ a0x, a0y }, { a1x, a1y }, th);
+	}
+	submitAndDiscard = true;
 	bgfx::submit(0, shdr);
 }
 
@@ -155,20 +183,31 @@ void bm::drawLine(Vec2 a, Vec2 b, float th){
 	float bX = cosf(angle + pi * 0.5f) * th * 0.5f;
 	float bY = sinf(angle + pi * 0.5f) * th * 0.5f;
 
-	v0.setPos(bx::Vec3( a.x + bX,	a.y + bY,	depth)); v0.setUV({ 0.f, 1.0f }); v0.setCol({ 1,0,0,1 }); //bl	
-	v1.setPos(bx::Vec3( a.x + tX,	a.y + tY,	depth)); v1.setUV({ 0.0f,0.0f }); v1.setCol({ 0,1,0,1 }); //tl
-	v2.setPos(bx::Vec3( b.x + tX,	b.y + tY,	depth)); v2.setUV({ 1.0f,0.0f }); v2.setCol({ 0,0,1,1 }); //tr
+	v0.setPos(bx::Vec3( a.x + bX,	a.y + bY,	depth)); v0.setUV({ 0.f, 1.0f });	
+	v1.setPos(bx::Vec3( a.x + tX,	a.y + tY,	depth)); v1.setUV({ 0.0f,0.0f });	
+	v2.setPos(bx::Vec3( b.x + tX,	b.y + tY,	depth)); v2.setUV({ 1.0f,0.0f });	
 
-	v3.setPos(bx::Vec3(b.x + tX, b.y + tY, depth)); v3.setUV({ 1.0f,0.0f }); v3.setCol({ 0,0,1,1 }); //tr
-	v4.setPos(bx::Vec3(b.x + bX, b.y + bY, depth));	v4.setUV({ 1.0f,1.0f }); v4.setCol({ 1,0,1,1 }); //br	
-	v5.setPos(bx::Vec3(a.x + bX, a.y + bY, depth)); v5.setUV({ 0.f, 1.0f }); v5.setCol({ 1,0,0,1 }); //bl	
+	v3.setPos(bx::Vec3(b.x + tX, b.y + tY, depth)); v3.setUV({ 1.0f,0.0f });		
+	v4.setPos(bx::Vec3(b.x + bX, b.y + bY, depth));	v4.setUV({ 1.0f,1.0f });		
+	v5.setPos(bx::Vec3(a.x + bX, a.y + bY, depth)); v5.setUV({ 0.f, 1.0f });		
 
-	//std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
-	//for (auto& v : vec)
-	//	v->setCol(bm::white);
+	if (false) {
+		v0.setCol({ 1,0,0,1 }); //bl	
+		v1.setCol({ 0,1,0,1 }); //tl
+		v2.setCol({ 0,0,1,1 }); //tr
+
+		v3.setCol({ 0,0,1,1 }); //tr
+		v4.setCol({ 1,0,1,1 }); //br	
+		v5.setCol({ 1,0,0,1 }); //bl	
+	}
+	else {
+		std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
+		for (auto& v : vec)
+			v->setCol(bm::white);
+	}
 
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
-	bgfx::submit(0, shdr);
+	submit();
 }
 
 

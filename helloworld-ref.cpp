@@ -80,7 +80,6 @@ int main(int argc, char **argv)
 	auto shdr = bm::getSpriteShader();
 	auto texSampler = bgfx::createUniform("tex0", bgfx::UniformType::Sampler, 1);
 
-
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		// Handle window resize.
@@ -106,18 +105,11 @@ int main(int argc, char **argv)
 		bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters.", stats->width, stats->height, stats->textWidth, stats->textHeight);
 
 		bm::makeMVP(width, height);
-		bm::makeRenderStates();
-		//bm::setTexture(tex);
-		//bgfx::setTexture(0, texSampler, texPhi);
-		bgfx::setTexture(0, texSampler, texPixel);
-		bm::setShader(shdr);
-		//bm::drawTri();
-		//bm::drawQuad({ 50, 50}, { 100*2, 94*2 });
-		bm::drawLine({ 300, 300 }, { 400,400 }, 64);
 
-		//bgfx::setTexture(0, texSampler, texPixel);
-		//bm::setShader(shdr);
-		//bm::drawQuad({ 16, 16 }, { 16, 16 }, {1,0,1,1});
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texPixel);
+		bm::drawLine({ 300, 300 }, { 400,400 }, 2);
+
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
 		bm::setShader(shdr);
@@ -125,8 +117,16 @@ int main(int argc, char **argv)
 
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
-		bm::setShader(shdr);
 		bm::drawQuad({ 400-8, 400-8}, { 16, 16 });
+
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texPhi);
+		bm::drawQuad({ 250-100, 250-100 }, { 2*100, 2*94 });
+		
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texPixel);
+		bm::drawCircle( { 100, 500}, 32, 2);
+		
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );
