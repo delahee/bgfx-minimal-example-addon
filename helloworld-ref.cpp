@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 		
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
-		bm::drawCircle( { 100, 500}, 32, 2);
+		bm::drawCircle( { 100, 500}, 32, 2, 0, bm::pink);
 		
 		
 		//bm::submit();//and discard current pipeline

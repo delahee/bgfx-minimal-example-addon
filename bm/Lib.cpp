@@ -21,7 +21,6 @@ void bm::plop(){
 static std::unordered_map<std::string, bgfx::TextureHandle>  texCache;
 
 bgfx::TextureHandle bm::getPng(const char * texPath) {
-
 	if (texCache.find(texPath) != texCache.end())
 		return texCache[texPath];
 
@@ -139,9 +138,9 @@ void bm::submit() {
 		bgfx::submit(0, shdr,0, BGFX_DISCARD_NONE);
 }
 
-void bm::drawCircle(Vec2 a, float radius, float th, int nbSegments){
+void bm::drawCircle(Vec2 a, float radius, float th, int nbSegments, Vec4 col){
 	float pi = 3.14159;
-	if (nbSegments <= 0)	nbSegments = std::ceil(radius * pi * 2 / 4);
+	if (nbSegments <= 0)	nbSegments = std::ceil(radius * pi * 2 / 2);
 	if (nbSegments < 3)		nbSegments = 3;
 
 	submitAndDiscard = false;
@@ -153,13 +152,21 @@ void bm::drawCircle(Vec2 a, float radius, float th, int nbSegments){
 		auto a0y = a.y + sinf(a0) * radius;
 		auto a1x = a.x + cosf(a1) * radius;
 		auto a1y = a.y + sinf(a1) * radius;
-		drawLine({ a0x, a0y }, { a1x, a1y }, th);
+		drawLine({ a0x, a0y }, { a1x, a1y }, th,col);
 	}
 	submitAndDiscard = true;
 	bgfx::submit(0, shdr);
 }
 
-void bm::drawLine(Vec2 a, Vec2 b, float th){
+void bm::drawCircle(Vec2 a, float radius, float thicc, int nbSegments){
+	drawCircle(a, radius, thicc, nbSegments, bm::white);
+}
+
+void bm::drawLine(Vec2 a, Vec2 b, float th ) {
+	drawLine(a, b, th, Vec4(1,1,1,1));
+}
+
+void bm::drawLine(Vec2 a, Vec2 b, float th,Vec4 col){
 	bgfx::TransientVertexBuffer tvb;
 	int maxVertices = 6;
 	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
@@ -203,7 +210,7 @@ void bm::drawLine(Vec2 a, Vec2 b, float th){
 	else {
 		std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
 		for (auto& v : vec)
-			v->setCol(bm::white);
+			v->setCol(col);
 	}
 
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
@@ -231,13 +238,13 @@ void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
 	float h = sz.y;
 	float depth = 0.01f;//because default render state is set to zless
 
-	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v0.setUV({ 0.f, 1.0f });
-	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth));	v1.setUV({ 0.0f,0.0f });
-	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v2.setUV({ 1.0f,0.0f });
+	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v0.setUV({ 0.f,		1.0f });
+	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth));	v1.setUV({ 0.0f,	0.0f });
+	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v2.setUV({ 1.0f,	0.0f });
 
-	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v3.setUV({ 1.f, 0.0f });
-	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h, depth));		v4.setUV({ 1.0f,1.0f });
-	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h, depth));		v5.setUV({ 0.0f,1.0f });
+	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v3.setUV({ 1.f,		0.0f });
+	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h,	depth));	v4.setUV({ 1.0f,	1.0f });
+	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v5.setUV({ 0.0f,	1.0f });
 
 	std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
 	for (auto& v : vec)

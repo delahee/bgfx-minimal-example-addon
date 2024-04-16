@@ -49,6 +49,7 @@ namespace bm {
 
 	static Vec4 white{ 1,1,1,1 };
 	static Vec4 magenta{ 1,0,1,1 };
+	static Vec4 pink{ 0xf0/255.0,0x76/255.0,0x8b/255.0,1 };
 
 	inline Vec4::Vec4(bx::init::NoneType)	{}
 
