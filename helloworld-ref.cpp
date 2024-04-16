@@ -110,8 +110,8 @@ int main(int argc, char **argv)
 		//bm::setTexture(tex);
 		bgfx::setTexture(0, texSampler, texPhi);
 		bm::setShader(shdr);
-		bm::drawTri();
-		//bm::drawQuad({100,000}, { 40,20 });
+		//bm::drawTri();
+		bm::drawQuad({ 50, 50}, { 100 *2, 94*2 });
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );

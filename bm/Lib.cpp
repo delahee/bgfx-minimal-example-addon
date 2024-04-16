@@ -132,8 +132,7 @@ void bm::drawTri(){
 }
 
 
-void bm::drawQuad(Vec2 pos, Vec2 sz)
-{
+void bm::drawQuad(Vec2 pos, Vec2 sz){
 	bgfx::TransientVertexBuffer tvb;
 	int maxVertices = 6;
 	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
@@ -149,12 +148,12 @@ void bm::drawQuad(Vec2 pos, Vec2 sz)
 	float h = sz.y;
 	float depth = 0.01f;//because default render state is set to zless
 
-	v0.setPos(bx::Vec3(pos.x + 0,			pos.y + h,	depth));
-	v1.setPos(bx::Vec3(pos.x + 0,			pos.y + 0,	depth));
-	v2.setPos(bx::Vec3(pos.x +w,			pos.y + 0,	depth));
-	v3.setPos(bx::Vec3(pos.x +w,			pos.y + 0,	depth));
-	v4.setPos(bx::Vec3(pos.x +w,			pos.y + h,	depth));
-	v5.setPos(bx::Vec3(pos.x + 0,			pos.y + h,	depth));
+	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v0.setUV({ 0.f, 1.0f });
+	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth));	v1.setUV({ 0.0f,0.0f });
+	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v2.setUV({ 1.0f,0.0f });
+	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v3.setUV({ 1.f, 0.0f });
+	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h, depth));		v4.setUV({ 1.0f,1.0f });
+	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h, depth));		v5.setUV({ 0.0f,1.0f });
 
 	std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
 	for (auto& v : vec)
