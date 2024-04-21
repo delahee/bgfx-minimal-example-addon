@@ -141,6 +141,9 @@ project "helloworld-game"
 	
 	files "bmg/Game.hpp"
 	files "bmg/Game.cpp"
+
+	files "bm/Input.hpp"
+	files "bm/Input.cpp"
 	
 	files "bm/res/*.*" 
 	files "bm/shdr/*.sc" 

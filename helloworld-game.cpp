@@ -24,6 +24,7 @@
 #include "bm/Lib.hpp"
 #include "bm/Sprite.hpp"
 #include "bm/Game.hpp"
+#include "bm/Input.hpp"
 
 #include "bmg/Game.hpp"
 #include "helloworld-game.h"
@@ -86,9 +87,13 @@ int main(int argc, char **argv)
 	auto shdr = bm::getSpriteShader();
 	auto texSampler = bgfx::createUniform("tex0", bgfx::UniformType::Sampler, 1);
 
+	bm::Input* input = new bm::Input(window);
 	auto now = bm::stamp();
 	auto dt = 0.15f;
 	while (!glfwWindowShouldClose(window)) {
+		auto ntime = bm::stamp();
+		dt = ntime - now + 0.000001f;
+		now = ntime;
 		glfwPollEvents();
 		// Handle window resize.
 		int oldWidth = width, oldHeight = height;
@@ -102,18 +107,39 @@ int main(int argc, char **argv)
 		//dummy ping
 		bgfx::touch(kClearView);
 
+		if (false) {
+			bgfx::dbgTextClear();
+			bgfx::dbgTextImage(bx::max<uint16_t>(uint16_t(width / 2 / 8), 20) - 20, bx::max<uint16_t>(uint16_t(height / 2 / 16), 6) - 6, 40, 12, s_logo, 160);
+			//x y are in cell (8x8) units...
+			bgfx::dbgTextPrintf(1, 1, 0x0f, "Press F1 to toggle stats.");
+		}
+
 		bm::makeMVP(width, height);
 
-		auto game = bm::Game::get();
+		auto game = bmg::Game::get();
+
+		/*
+		input->onKey = [=](int key, int scan, int ac, int mods) {
+			bool isDown = ac == GLFW_PRESS || ac == GLFW_REPEAT;
+
+			if (isDown && (key == GLFW_KEY_LEFT)) 
+				game->red.pos.x -= 5;
+			if (isDown && (key == GLFW_KEY_RIGHT))
+				game->red.pos.x += 5;
+			if (isDown && (key == GLFW_KEY_UP))
+				game->red.pos.y -= 5;
+			if (isDown && (key == GLFW_KEY_DOWN))
+				game->red.pos.y += 5;
+		};
+		*/
 		game->draw();
+		game->input(window,dt);
 		game->update(dt);
 		
 		bgfx::setDebug(s_showStats ? BGFX_DEBUG_STATS : BGFX_DEBUG_TEXT);
 		// Advance to next frame. Process submitted rendering primitives.
 		bgfx::frame();
-		auto ntime = now = bm::stamp();
-		dt = ntime - now;
-		now = ntime;
+		
 	}
 	bgfx::shutdown();
 	glfwTerminate();

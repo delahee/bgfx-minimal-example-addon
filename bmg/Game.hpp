@@ -1,5 +1,6 @@
 #pragma once
 
+struct GLFWwindow;
 namespace bmg {
 	class Game : public bm::Game{
 		typedef bm::Game Super;
@@ -11,7 +12,8 @@ namespace bmg {
 		virtual				~Game() {};
 
 		static bmg::Game*	get();
-		virtual void		update(double dt);
-		virtual void		draw();
+		virtual void		input(GLFWwindow*win,double dt) override;
+		virtual void		update(double dt) override;
+		virtual void		draw() override;
 	};
 }

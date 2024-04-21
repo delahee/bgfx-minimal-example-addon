@@ -4,6 +4,8 @@
 #include "bm/Sprite.hpp"
 #include "bmg/Game.hpp"
 
+#include <GLFW/glfw3.h>
+
 bmg::Game::Game(){
 	auto texPixel = bm::getPng("bm/res/pixel.png");
 	auto texPhi = bm::getPng("bm/res/phi_angry.png");
@@ -37,8 +39,7 @@ bmg::Game::Game(){
 	red = spr;
 }
 
-void bmg::Game::update(double dt)
-{
+void bmg::Game::update(double dt){
 }
 
 void bmg::Game::draw(){
@@ -50,4 +51,15 @@ static bmg::Game * s_game = 0;
 bmg::Game* bmg::Game::get(){
 	if(!s_game) s_game = new bmg::Game();
 	return s_game;
+}
+
+void bmg::Game::input(GLFWwindow* window, double dt){
+	if (glfwGetKey(window, GLFW_KEY_UP) != 0)
+		red.pos.y -= 5 * 60 * dt;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) != 0)
+		red.pos.y += 5 * 60 * dt;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) != 0) 
+		red.pos.x -= 5 * 60 * dt;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) != 0)
+		red.pos.x += 5 * 60 * dt;
 }

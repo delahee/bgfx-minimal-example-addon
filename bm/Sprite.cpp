@@ -7,7 +7,7 @@ void bm::Sprite::draw(){
 	bm::setShader(mat.shdr);
 	bm::makeRenderStates();
 	bgfx::setTexture(0, mat.sampler, mat.tex);
-	bm::drawQuad( pos, size);
+	bm::drawQuad( pos, size );
 }
 
 void bm::SpriteBatch::draw() {
