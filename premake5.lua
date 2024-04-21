@@ -81,12 +81,21 @@ project "helloworld-ref"
 	--exceptionhandling "Off"
 	--rtti "Off"
 	files "helloworld-ref.cpp"
-	files "bm/Lib.hpp"
+	
 	files "bm/Math.hpp"
+	
+	files "bm/Sprite.hpp"
+	files "bm/Sprite.cpp"
+	
+	files "bm/Lib.hpp"
 	files "bm/Lib.cpp"
 	
 	files "bm/shdr/vs_sprite.bin.h"
 	files "bm/shdr/fs_sprite.bin.h"
+	
+	
+	files "bm/Game.hpp"
+	files "bm/Game.cpp"
 	
 	files "bm/res/*.*" 
 	files "bm/shdr/*.sc" 

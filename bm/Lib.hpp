@@ -65,6 +65,7 @@ namespace bm {
 	void				setShader(bgfx::ProgramHandle s);
 
 	void				drawTri();
+
 	void				submit();
 	// pos size pivot?
 	void				drawCircle(Vec2 a, float radius, float thicc = 1, int nbSegments = 0);
@@ -73,6 +74,8 @@ namespace bm {
 	void				drawLine(Vec2 a, Vec2 b, float w); // pos pos
 	void				drawQuad(Vec2 pos, Vec2 sz); // pos size pivot?
 	void				drawQuad(Vec2 pos, Vec2 sz,Vec4 col); // pos size pivot?
+
+	double				stamp();
 
 	
 }

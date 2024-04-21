@@ -2,10 +2,15 @@
  * Copyright 2011-2019 Branimir Karadzic. All rights reserved.
  * License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
  */
-#include <stdio.h>
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <filesystem>
+
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
+
 #include <GLFW/glfw3.h>
 #if BX_PLATFORM_LINUX
 #define GLFW_EXPOSE_NATIVE_X11
@@ -17,10 +22,7 @@
 #include <GLFW/glfw3native.h>
 #include "logo.h"
 #include "bm/Lib.hpp"
-
-#include <string>
-#include <iostream>
-#include <filesystem>
+#include "bm/Sprite.hpp"
 
 
 static bool s_showStats = false;
@@ -76,6 +78,7 @@ int main(int argc, char **argv)
 
 	auto texPixel = bm::getPng("bm/res/pixel.png");
 	auto texPhi = bm::getPng("bm/res/phi_angry.png");
+	auto texGround = bm::getPng("bm/res/ground.png");
 
 	auto shdr = bm::getSpriteShader();
 	auto texSampler = bgfx::createUniform("tex0", bgfx::UniformType::Sampler, 1);
@@ -109,10 +112,10 @@ int main(int argc, char **argv)
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
 		bm::drawLine({ 300, 300 }, { 400,400 }, 2);
+		bm::setShader(shdr);
 
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
-		bm::setShader(shdr);
 		bm::drawQuad({ 300-8, 300-8}, { 16, 16 });
 
 		bm::makeRenderStates();
@@ -122,11 +125,21 @@ int main(int argc, char **argv)
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPhi);
 		bm::drawQuad({ 250-100, 250-100 }, { 2*100, 2*94 });
+
+		bm::Sprite spr;
+		spr.pos = { 400,200 };
+		spr.size = { 2 * 100, 2 * 94 };
+		spr.mat = { texPhi, texSampler, shdr };
+		spr.draw();
 		
 		bm::makeRenderStates();
 		bgfx::setTexture(0, texSampler, texPixel);
 		bm::drawCircle( { 100, 500}, 32, 2, 0, bm::pink);
-		
+
+
+		bm::makeRenderStates();
+		bgfx::setTexture(0, texSampler, texGround);
+		bm::drawQuad({ 0,0 }, { 16,16 });
 		
 		//bm::submit();//and discard current pipeline
 		//bgfx::dbgTextImage(64, 64, 4, 4, );

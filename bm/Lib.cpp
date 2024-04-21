@@ -5,7 +5,6 @@
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
 
-
 #include "Lib.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -35,7 +34,7 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 		return {};
 	}
 	uint8_t* bytes = stbi_load_from_file(c, &w, &h, &chans, desired);
-	uint32_t sz = w * h * chans;
+	uint32_t sz = w * h * desired;
 	fclose(c);
 
 	const bgfx::Memory * mem = bgfx::alloc(sz);
@@ -47,8 +46,6 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 }
 
 ///SHADER SECTION
-
-
 bgfx::VertexLayout PosUVColVertex::vtx_layout;
 
 #include <bgfx/embedded_shader.h>
@@ -252,6 +249,14 @@ void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
 
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, shdr);
+}
+
+#include <chrono>
+
+double bm::stamp(){
+	std::chrono::nanoseconds ns =
+		std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch());
+	return ns.count() / 1000000000.0;
 }
 
 
