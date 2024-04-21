@@ -5,7 +5,6 @@
 Game::Game(){
 }
 
-
 struct Time {
 	double now = 0;
 };

@@ -26,6 +26,6 @@ namespace bm {
 		std::vector<Vec4>	colors;
 		Material			mat;
 
-		void			draw();
+		void				draw();
 	};
 }
