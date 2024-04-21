@@ -23,7 +23,10 @@
 #include "logo.h"
 #include "bm/Lib.hpp"
 #include "bm/Sprite.hpp"
+#include "bm/Game.hpp"
 
+#include "bmg/Game.hpp"
+#include "helloworld-game.h"
 
 static bool s_showStats = false;
 
@@ -83,6 +86,8 @@ int main(int argc, char **argv)
 	auto shdr = bm::getSpriteShader();
 	auto texSampler = bgfx::createUniform("tex0", bgfx::UniformType::Sampler, 1);
 
+	auto now = bm::stamp();
+	auto dt = 0.15f;
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		// Handle window resize.
@@ -99,21 +104,16 @@ int main(int argc, char **argv)
 
 		bm::makeMVP(width, height);
 
-		bm::Sprite spr;
-		spr.pos = { 0,0 };
-		spr.size = { 16 *2, 16*2 };
-		spr.mat = { texGround, texSampler, shdr };
-		spr.draw();
-
-		spr.pos = { 400,200 };
-		spr.size = { 2 * 100, 2 * 94 };
-		spr.mat = { texRed, texSampler, shdr };
-		spr.draw();
-
+		auto game = bm::Game::get();
+		game->draw();
+		game->update(dt);
 		
 		bgfx::setDebug(s_showStats ? BGFX_DEBUG_STATS : BGFX_DEBUG_TEXT);
 		// Advance to next frame. Process submitted rendering primitives.
 		bgfx::frame();
+		auto ntime = now = bm::stamp();
+		dt = ntime - now;
+		now = ntime;
 	}
 	bgfx::shutdown();
 	glfwTerminate();

@@ -140,9 +140,6 @@ int main(int argc, char **argv)
 		bgfx::setTexture(0, texSampler, texGround);
 		bm::drawQuad({ 0,0 }, { 16,16 });
 		
-		//bm::submit();//and discard current pipeline
-		//bgfx::dbgTextImage(64, 64, 4, 4, );
-		// Enable stats or debug text.
 		
 		bgfx::setDebug(s_showStats ? BGFX_DEBUG_STATS : BGFX_DEBUG_TEXT);
 		// Advance to next frame. Process submitted rendering primitives.

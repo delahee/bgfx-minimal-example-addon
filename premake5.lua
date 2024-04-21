@@ -136,9 +136,11 @@ project "helloworld-game"
 	files "bm/shdr/vs_sprite.bin.h"
 	files "bm/shdr/fs_sprite.bin.h"
 	
-	
 	files "bm/Game.hpp"
 	files "bm/Game.cpp"
+	
+	files "bmg/Game.hpp"
+	files "bmg/Game.cpp"
 	
 	files "bm/res/*.*" 
 	files "bm/shdr/*.sc" 
@@ -150,7 +152,8 @@ project "helloworld-game"
 		path.join(GLFW_DIR, "include"),
 		path.join(BIMG_DIR, "include"),
 		"bm",
-		"bm/shdr"
+		"bm/shdr",
+		"."
 	}
 	links { "bgfx", "bimg", "bx", "glfw" }
 	filter "system:windows"

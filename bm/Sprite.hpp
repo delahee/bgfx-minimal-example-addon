@@ -20,12 +20,14 @@ namespace bm {
 	};
 
 	struct SpriteBatch {
-		std::vector<Vec2>	positions;
+		std::vector<Vec2>	position;
 		std::vector<Vec2>	size;
 		std::vector<Vec4>	uv;
-		std::vector<Vec4>	colors;
+		std::vector<Vec4>	color;
 		Material			mat;
 
+		void				reserve(int nb);
+		void				resize(int nb);
 		void				draw();
 	};
 }

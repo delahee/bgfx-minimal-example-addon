@@ -11,7 +11,9 @@ void bm::Sprite::draw(){
 }
 
 void bm::SpriteBatch::draw() {
-	int nb = positions.size();
+	int nb = position.size();
+	if (!nb)
+		return;
 	bgfx::TransientVertexBuffer tvb;
 	int maxVertices = 6 * nb;
 	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
@@ -20,8 +22,8 @@ void bm::SpriteBatch::draw() {
 
 	int ofs = 0;
 	for (int i = 0; i < nb; ++i) {
-		auto& pos = positions[i];
-		auto& col = colors[i];
+		auto& pos = position[i];
+		auto& col = color[i];
 		auto& sz = size[i];
 		PosUVColVertex& v0 = *(vtxData + 0 + ofs);
 		PosUVColVertex& v1 = *(vtxData + 1 + ofs);
@@ -45,7 +47,8 @@ void bm::SpriteBatch::draw() {
 		for (auto& v : vec)
 			v->setCol(col);
 
-		ofs += PosUVColVertex::vtx_layout.getStride();
+		int nextQuadofs = 6;
+		ofs += nextQuadofs;
 	}
 
 	bm::setShader(mat.shdr);
@@ -53,4 +56,18 @@ void bm::SpriteBatch::draw() {
 	bgfx::setTexture(0, mat.sampler, mat.tex);
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, mat.shdr);
+}
+
+void bm::SpriteBatch::reserve(int nb){
+	position.reserve(nb);
+	size.reserve(nb);
+	uv.reserve(nb);
+	color.reserve(nb);
+}
+
+void bm::SpriteBatch::resize(int nb) {
+	position.resize(nb, {0,0});
+	size.resize(nb, {0,0});
+	uv.resize(nb, {0,0,1,1});
+	color.resize(nb, {1,1,1,1});
 }

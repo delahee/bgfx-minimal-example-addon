@@ -1,9 +1,14 @@
 #pragma once
 
-class Game {
+namespace bm {
+	class Game {
+	public:
+		Game();
+		virtual ~Game() {};
 
-	Game();
+		void update(double dt);
+		void draw();
 
-	void update(double dt);
-	void draw();
-};
+		static bm::Game* get();
+	};
+}
