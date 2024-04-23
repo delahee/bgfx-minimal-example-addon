@@ -16,7 +16,9 @@ namespace bm {
 		Vec2			size = Vec2(32);
 		Vec2			pivot = Vec2(0);
 		Material		mat;
-		
+		bool			flippedX = false;
+
+						Sprite();
 		void			draw();
 	};
 

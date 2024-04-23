@@ -14,7 +14,10 @@ void bm::Sprite::draw(){
 	Vec2 fp = pos;
 	fp.x -= pivot.x * mat.tex.size.x * sx;
 	fp.y -= pivot.y * mat.tex.size.y * sy;
-	bm::drawQuad(fp, size);
+	bm::drawQuad(fp, size, {1,1,1,1}, flippedX);
+}
+
+bm::Sprite::Sprite(){
 }
 
 void bm::SpriteBatch::draw() {

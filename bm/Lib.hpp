@@ -33,6 +33,10 @@ struct PosUVColVertex{
 		uv[1] = v.y;
 	};
 
+	inline Vec2 getUV() const {
+		return { uv[0], uv[1] };
+	};
+
 	inline void setCol(const bm::Vec4& v) {
 		col[0] = v.x;
 		col[1] = v.y;
@@ -81,9 +85,10 @@ namespace bm {
 	void				drawLine(Vec2 a, Vec2 b, float th, Vec4 col);
 	void				drawLine(Vec2 a, Vec2 b, float w); // pos pos
 	void				drawQuad(Vec2 pos, Vec2 sz); // pos size pivot?
-	void				drawQuad(Vec2 pos, Vec2 sz,Vec4 col); // pos size pivot?
+	void				drawQuad(Vec2 pos, Vec2 sz, Vec4 col); // pos size pivot?
+	void				drawQuad(Vec2 pos, Vec2 sz, Vec4 col, bool flippedX ); // pos size pivot?
 
 	double				stamp();
-
-	
 }
+
+void trace(const char* str);

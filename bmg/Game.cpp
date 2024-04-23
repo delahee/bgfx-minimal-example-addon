@@ -1,10 +1,12 @@
+#include <GLFW/glfw3.h>
+#include <unordered_map>
 #include "Lib.hpp"
 #include "Math.hpp"
 #include "bm/Game.hpp"
 #include "bm/Sprite.hpp"
 #include "bmg/Game.hpp"
 
-#include <GLFW/glfw3.h>
+
 
 bmg::Game::Game(){
 	auto texPixel = bm::getPng("bm/res/pixel.png");
@@ -54,7 +56,22 @@ bmg::Game* bmg::Game::get(){
 	return s_game;
 }
 
+
+static std::unordered_map<int, int> prevState;
 void bmg::Game::input(GLFWwindow* window, double dt){
+	auto wasPressed = [](int k ) {
+		return prevState.find(k) != prevState.end() && prevState[k] == GLFW_PRESS;
+	};
+	auto isDown = [=](int k) {
+		return glfwGetKey(window,k) == GLFW_PRESS;
+	};
+	auto justPressed = [=](int k) {
+		return !wasPressed(k) && isDown(k);
+	};
+	auto justReleased = [=](int k) {
+		return wasPressed(k) && !isDown(k);
+	};
+
 	if (glfwGetKey(window, GLFW_KEY_UP) != 0)
 		red.pos.y -= 5 * 60 * dt;
 	if (glfwGetKey(window, GLFW_KEY_DOWN) != 0)
@@ -63,4 +80,16 @@ void bmg::Game::input(GLFWwindow* window, double dt){
 		red.pos.x -= 5 * 60 * dt;
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) != 0)
 		red.pos.x += 5 * 60 * dt;
+
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) 
+		trace("pr");
+	
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_REPEAT) 
+		trace("rep");
+	
+	if (justPressed( GLFW_KEY_SPACE)) 
+		red.flippedX = !red.flippedX;
+
+	for (auto k : { GLFW_KEY_UP ,GLFW_KEY_DOWN,GLFW_KEY_LEFT ,GLFW_KEY_RIGHT,GLFW_KEY_SPACE })
+		prevState[k] = glfwGetKey(window, k);
 }

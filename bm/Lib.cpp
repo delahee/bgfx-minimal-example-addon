@@ -219,7 +219,7 @@ void bm::drawQuad(Vec2 pos, Vec2 sz){
 	drawQuad(pos, sz, Vec4(1, 1, 1, 1));
 }
 
-void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
+void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col, bool flippedX){
 	bgfx::TransientVertexBuffer tvb;
 	int maxVertices = 6;
 	bgfx::allocTransientVertexBuffer(&tvb, maxVertices, PosUVColVertex::vtx_layout);
@@ -235,20 +235,28 @@ void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
 	float h = sz.y;
 	float depth = 0.01f;//because default render state is set to zless
 
-	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v0.setUV({ 0.f,		1.0f });
-	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth));	v1.setUV({ 0.0f,	0.0f });
-	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v2.setUV({ 1.0f,	0.0f });
+	v0.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth)); v0.setUV({ 0.f,	1.0f });
+	v1.setPos(bx::Vec3(pos.x + 0,	pos.y + 0,	depth)); v1.setUV({ 0.0f,	0.0f });
+	v2.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth)); v2.setUV({ 1.0f,	0.0f });
+	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth)); v3.setUV({ 1.f,	0.0f });
+	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h,	depth)); v4.setUV({ 1.0f,	1.0f });
+	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth)); v5.setUV({ 0.0f,	1.0f });
 
-	v3.setPos(bx::Vec3(pos.x + w,	pos.y + 0,	depth));	v3.setUV({ 1.f,		0.0f });
-	v4.setPos(bx::Vec3(pos.x + w,	pos.y + h,	depth));	v4.setUV({ 1.0f,	1.0f });
-	v5.setPos(bx::Vec3(pos.x + 0,	pos.y + h,	depth));	v5.setUV({ 0.0f,	1.0f });
-
-	std::vector<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
-	for (auto& v : vec)
+	std::initializer_list<PosUVColVertex*>vec = { &v0,&v1,&v2,&v3,&v4,&v5 };
+	for (auto& v : vec) {
 		v->setCol(col);
+		if (flippedX) {
+			Vec2 uv{ v->getUV() };
+			v->setUV({1.0f - uv.x, uv.y});
+		}
+	}
 
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, shdr);
+}
+
+void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
+	bm::drawQuad(pos, sz, col);
 }
 
 #include <chrono>
@@ -259,9 +267,9 @@ double bm::stamp(){
 	return ns.count() / 1000000000.0;
 }
 
-
-
-//DRAW QUAD
-
 Tex::Tex(bgfx::TextureHandle _hdl, Vec2 _size) : hdl(_hdl), size(_size){
+}
+
+void trace(const char* str){
+	printf("%s\n", str);
 }
