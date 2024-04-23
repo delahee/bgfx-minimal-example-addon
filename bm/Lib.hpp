@@ -51,9 +51,17 @@ struct Quad {
 	PosUVColVertex* vtx;
 };
 
+struct Tex {
+	bgfx::TextureHandle hdl;
+	Vec2				size;
+
+	Tex() : size{0,0} {};
+	Tex(bgfx::TextureHandle hdl, Vec2 size);
+};
+
 namespace bm {
 	void				plop();
-	bgfx::TextureHandle getPng(const char * texPath);
+	Tex					getPng(const char * texPath);
 	bgfx::ProgramHandle	getSpriteShader();
 
 	static bm::Matrix4	model;

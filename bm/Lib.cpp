@@ -17,9 +17,9 @@ void bm::plop(){
 	printf("toto");
 }
 
-static std::unordered_map<std::string, bgfx::TextureHandle>  texCache;
+static std::unordered_map<std::string, Tex>  texCache;
 
-bgfx::TextureHandle bm::getPng(const char * texPath) {
+Tex bm::getPng(const char * texPath) {
 	if (texCache.find(texPath) != texCache.end())
 		return texCache[texPath];
 
@@ -31,7 +31,7 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 	int desired = 4;
 	if (!c) {
 		printf("no tex content");
-		return {};
+		return { {}, {0,0} };
 	}
 	uint8_t* bytes = stbi_load_from_file(c, &w, &h, &chans, desired);
 	uint32_t sz = w * h * desired;
@@ -41,8 +41,8 @@ bgfx::TextureHandle bm::getPng(const char * texPath) {
 	memcpy(mem->data, bytes,sz);
 	auto hdl = bgfx::createTexture2D(w, h, false, 1, bgfx::TextureFormat::RGBA8, BGFX_SAMPLER_POINT, mem);
 	free(bytes);
-	texCache[texPath] = hdl;
-	return hdl;
+	Tex t = texCache[texPath] = { hdl, Vec2( w,h ) };
+	return t;
 }
 
 ///SHADER SECTION
@@ -262,3 +262,6 @@ double bm::stamp(){
 
 
 //DRAW QUAD
+
+Tex::Tex(bgfx::TextureHandle _hdl, Vec2 _size) : hdl(_hdl), size(_size){
+}

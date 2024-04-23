@@ -1,2 +1,5 @@
-ajouter tile ennemies
+ajouter tile ennemies 
 ajouter tile boulette
+ajouter flipX
+ajouter pivot centré
+ajouter imgui?

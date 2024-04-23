@@ -6,8 +6,15 @@ using namespace bm;
 void bm::Sprite::draw(){
 	bm::setShader(mat.shdr);
 	bm::makeRenderStates();
-	bgfx::setTexture(0, mat.sampler, mat.tex);
-	bm::drawQuad( pos, size );
+	bgfx::setTexture(0, mat.sampler, mat.tex.hdl);
+
+
+	float sx = size.x / mat.tex.size.x;
+	float sy = size.y / mat.tex.size.y;
+	Vec2 fp = pos;
+	fp.x -= pivot.x * mat.tex.size.x * sx;
+	fp.y -= pivot.y * mat.tex.size.y * sy;
+	bm::drawQuad(fp, size);
 }
 
 void bm::SpriteBatch::draw() {
@@ -53,7 +60,7 @@ void bm::SpriteBatch::draw() {
 
 	bm::setShader(mat.shdr);
 	bm::makeRenderStates();
-	bgfx::setTexture(0, mat.sampler, mat.tex);
+	bgfx::setTexture(0, mat.sampler, mat.tex.hdl);
 	bgfx::setVertexBuffer(0, &tvb, 0, maxVertices);
 	bgfx::submit(0, mat.shdr);
 }

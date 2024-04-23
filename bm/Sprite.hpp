@@ -6,7 +6,7 @@
 namespace bm {
 
 	struct Material {
-		bgfx::TextureHandle tex;
+		Tex					tex;
 		bgfx::UniformHandle sampler;
 		bgfx::ProgramHandle shdr;
 	};
@@ -14,6 +14,7 @@ namespace bm {
 	struct Sprite {
 		Vec2			pos = Vec2(0);
 		Vec2			size = Vec2(32);
+		Vec2			pivot = Vec2(0);
 		Material		mat;
 		
 		void			draw();

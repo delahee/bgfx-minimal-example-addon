@@ -110,20 +110,20 @@ int main(int argc, char **argv)
 		bm::makeMVP(width, height);
 
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texPixel);
+		bgfx::setTexture(0, texSampler, texPixel.hdl);
 		bm::drawLine({ 300, 300 }, { 400,400 }, 2);
 		bm::setShader(shdr);
 
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texPixel);
+		bgfx::setTexture(0, texSampler, texPixel.hdl);
 		bm::drawQuad({ 300-8, 300-8}, { 16, 16 });
 
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texPixel);
+		bgfx::setTexture(0, texSampler, texPixel.hdl);
 		bm::drawQuad({ 400-8, 400-8}, { 16, 16 });
 
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texPhi);
+		bgfx::setTexture(0, texSampler, texPhi.hdl);
 		bm::drawQuad({ 250-100, 250-100 }, { 2*100, 2*94 });
 
 		bm::Sprite spr;
@@ -133,11 +133,11 @@ int main(int argc, char **argv)
 		spr.draw();
 		
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texPixel);
+		bgfx::setTexture(0, texSampler, texPixel.hdl);
 		bm::drawCircle( { 100, 500}, 32, 2, 0, bm::pink);
 
 		bm::makeRenderStates();
-		bgfx::setTexture(0, texSampler, texGround);
+		bgfx::setTexture(0, texSampler, texGround.hdl);
 		bm::drawQuad({ 0,0 }, { 16,16 });
 		
 		

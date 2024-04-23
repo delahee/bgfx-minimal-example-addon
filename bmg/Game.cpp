@@ -31,7 +31,8 @@ bmg::Game::Game(){
 	sprb.mat = { texGround, texSampler, shdr };
 
 	bm::Sprite spr;
-	spr.pos = { 400,200 };
+	spr.pos = { 100,100 };
+	spr.pivot = { 0.5,0.5 };
 	spr.size = { 64 * 2, 64 * 2 };
 	spr.mat = { texRed, texSampler, shdr };
 
