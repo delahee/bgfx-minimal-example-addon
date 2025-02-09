@@ -256,7 +256,7 @@ void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col, bool flippedX){
 }
 
 void bm::drawQuad(Vec2 pos, Vec2 sz, Vec4 col){
-	bm::drawQuad(pos, sz, col);
+	bm::drawQuad(pos, sz, col, false);
 }
 
 #include <chrono>
